@@ -41,17 +41,16 @@ xmetrics řeší všechny tři:
 
 [3] ARCHITEKTURA SYSTÉMU
 
-graph TD 
 
-D - Weekly Dataset --> 
+-  D - Weekly Dataset --> 
 
-R1: H. Marks - Value & Cycle
-R2: Druckenmiller - Macro & Liquidity 
-R3: Damodaran - Valuation DCF
-R4: Taleb - Tail Risk
-R5: TA Analyst - Price & GEX 
+-  R1: H. Marks - Value & Cycle
+-  R2: Druckenmiller - Macro & Liquidity 
+-  R3: Damodaran - Valuation DCF
+-  R4: Taleb - Tail Risk
+-  R5: TA Analyst - Price & GEX 
 
-R6: CIO Synthesis (Price & GEX) -->  M[Memory]
+-  R6: CIO Synthesis (Price & GEX) -->  M[Memory]
 
 ---
 
