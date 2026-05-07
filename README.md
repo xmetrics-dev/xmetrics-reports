@@ -41,9 +41,17 @@ xmetrics řeší všechny tři:
 
 [3] ARCHITEKTURA SYSTÉMU
 
-Schéma níže ukazuje tok dat od surových metrik k finálnímu CIO verdiktu.
+graph TD 
 
-<img src="img/https://xmetrics.dev/img/str-xmetrics.svg" alt="xmetrics architektura" width="600">
+D[Weekly Dataset] --> 
+
+[R1: H. Marks - Value & Cycle] 
+[R2: Druckenmiller - Macro & Liquidity] 
+[R3: Damodaran - Valuation DCF] 
+[R4: Taleb - Tail Risk]
+[R5: TA Analyst - Price & GEX] 
+
+[R6: CIO Synthesis - Price & GEX] -->  M[Memory]
 
 ---
 
