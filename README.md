@@ -50,7 +50,7 @@ xmetrics řeší všechny tři:
 -  R4: Taleb - Tail Risk
 -  R5: TA Analyst - Price & GEX 
 
--  R6: CIO Synthesis (Price & GEX) -->  M[Memory]
+-  R6: CIO Synthesis (Price & GEX) -->  M (Memory)
 
 ---
 
