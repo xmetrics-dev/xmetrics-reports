@@ -5,6 +5,35 @@ import requests
 BASE_URL = "https://xmetrics.dev/reports"
 
 
+def download_file(url, local_path):
+    try:
+        response = requests.get(url, timeout=20)
+
+        if response.status_code == 200:
+            content = response.content.decode("utf-8")
+
+            with open(local_path, "w", encoding="utf-8", newline="\n") as f:
+                f.write(content)
+
+            print(f"✅ Staženo: {os.path.basename(local_path)}")
+            return True
+
+        else:
+            print(f"❌ Nenalezeno: {url} (Status {response.status_code})")
+            return False
+
+    except UnicodeDecodeError as e:
+        print(f"⚠️ UTF-8 decode chyba: {e}")
+
+    except requests.RequestException as e:
+        print(f"⚠️ HTTP chyba: {e}")
+
+    except Exception as e:
+        print(f"⚠️ Neočekávaná chyba: {e}")
+
+    return False
+
+
 def download_reports(target_date):
     if not target_date:
         print("❌ Chyba: Nebylo zadáno žádné datum!")
@@ -15,43 +44,39 @@ def download_reports(target_date):
 
     success_count = 0
 
+    # =========================
+    # REPORTY R1-R6
+    # =========================
     for i in range(1, 7):
-        filename = f"R{i}_{target_date}.md"
-        url = f"{BASE_URL}/{target_date}/{filename}"
+        remote_name = f"R{i}_{target_date}.md"
+        url = f"{BASE_URL}/{target_date}/{remote_name}"
 
-        try:
-            response = requests.get(url, timeout=20)
+        local_name = f"R{i}.md"
+        local_path = os.path.join(target_dir, local_name)
 
-            if response.status_code == 200:
-                local_name = f"R{i}.md"
-                local_path = os.path.join(target_dir, local_name)
+        if download_file(url, local_path):
+            success_count += 1
 
-                # RAW bytes -> explicit UTF-8 decode
-                content = response.content.decode("utf-8")
+    # =========================
+    # DATASET D_YYYY-MM-DD.md
+    # =========================
+    dataset_remote = f"D_{target_date}.md"
+    dataset_url = f"{BASE_URL}/{target_date}/{dataset_remote}"
 
-                with open(local_path, "w", encoding="utf-8", newline="\n") as f:
-                    f.write(content)
+    dataset_local = "DATASET.md"
+    dataset_local_path = os.path.join(target_dir, dataset_local)
 
-                print(f"✅ Staženo: {local_name}")
-                success_count += 1
+    if download_file(dataset_url, dataset_local_path):
+        success_count += 1
 
-            else:
-                print(f"❌ Nenalezeno: {filename} (Status {response.status_code})")
-
-        except UnicodeDecodeError as e:
-            print(f"⚠️ UTF-8 decode chyba u {filename}: {e}")
-
-        except requests.RequestException as e:
-            print(f"⚠️ HTTP chyba u {filename}: {e}")
-
-        except Exception as e:
-            print(f"⚠️ Neočekávaná chyba u {filename}: {e}")
-
+    # =========================
+    # VÝSLEDEK
+    # =========================
     if success_count == 0:
-        print("❌ Nepodařilo se stáhnout žádný report.")
+        print("❌ Nepodařilo se stáhnout žádné soubory.")
         sys.exit(1)
 
-    print(f"\n✅ Hotovo. Staženo {success_count} reportů.")
+    print(f"\n✅ Hotovo. Staženo {success_count} souborů.")
 
 
 if __name__ == "__main__":
