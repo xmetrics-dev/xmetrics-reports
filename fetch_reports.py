@@ -60,10 +60,10 @@ def download_reports(target_date):
     # =========================
     # DATASET D_YYYY-MM-DD.md
     # =========================
-    dataset_remote = f"D_{target_date}.md"
+    dataset_remote = f"D_{target_date}.csv"
     dataset_url = f"{BASE_URL}/{target_date}/{dataset_remote}"
 
-    dataset_local = "DATASET.md"
+    dataset_local = "DATASET.csv"
     dataset_local_path = os.path.join(target_dir, dataset_local)
 
     if download_file(dataset_url, dataset_local_path):
