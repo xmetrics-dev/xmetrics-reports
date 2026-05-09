@@ -1,17 +1,13 @@
-## Multiagentní analýza S&P 500
+ntní analýza S&P 500
 
-Dokumentace systému xmetrics — jak to funguje, proč to existuje a co z toho má drobný investor.
 
----
+[1] O PROJEKTU
 
-[1] STRUČNĚ O ČEM TO JE
+xmetrics je týdenní analytický nástroj, který simuluje rozhodovací proces top hedge fondu. Každý pátek po uzavření amerického trhu je zachycen snímek **100 metrik** o trhu, makroekonomice, kreditu, sentimentu a opcích. Tento dataset projde **pěti virtuálními analytickými agenty**, jejichž uvažování je kalibrováno podle metodologií Howarda Markse, Stanleyho Druckenmillera, Aswatha Damodarana, Nassima Taleba a profesionálního technického analytika. Všech pět reportů pak dostane **CIO ředitel**, který je posuzuje výstupy agentů, vede mezi agenty debatu a syntetizuje finální investiční postoj.
 
-xmetrics je týdenní analytický nástroj, který simuluje rozhodovací proces top hedge fondu. Každý pátek po uzavření amerického trhu je zachycen snímek **100 metrik** o trhu, makroekonomice, kreditu, sentimentu a opcích. Tento dataset projde **pěti virtuálními analytickými agenty**, jejichž uvažování je kalibrováno podle metodologií Howarda Markse, Stanleyho Druckenmillera, Aswatha Damodarana, Nassima Taleba a profesionálního technického analytika. Všech pět reportů pak dostane **CIO ředitel**, který je posuzuje, vede mezi agenty debatu a syntetizuje finální investiční postoj.
+Engine pohánějící systém je **Anthropic Claude Opus**. Klíčová věc — systém si **pamatuje**. Tříúrovňová paměť (krátkodobá, střednědobá, dlouhodobá) umožňuje CIO sledovat predikci, penalizovat agenty, jejichž volání selhala, posilovat ty, kteří se trefili, dynamicky upravovat váhy a postupně zpřesňovat rozhodovací matici.
 
-Engine pohánějící systém je **Anthropic Claude Opus**. Klíčová věc — systém si **pamatuje**. Tříúrovňová paměť (krátkodobá, střednědobá, dlouhodobá) umožňuje CIO sledovat každou minulou predikci, penalizovat agenty, jejichž volání selhala, posilovat ty, kteří se trefili, dynamicky upravovat váhy a postupně zpřesňovat rozhodovací matici.
-
-Cílem není konkurovat institucím. Cílem je dát drobnému investorovi framework, pro hlubší porozumění, co se děje pod povrchem trhu SPX. Každý závěr je **falsifikovatelný** (každý report obsahuje konkrétní hypotézy s datem ověření), každá změna vah je **auditovatelná** a celý řetězec uvažování je vždy vystaven.
-
+Cílem projektu je hlubší porozumění trhu SPX, co se děje pod povrchem jeho cenového vývoje. Každý závěr je **falsifikovatelný** (každý report obsahuje konkrétní hypotézy s datem ověření), každá změna vah je **auditovatelná** a celý řetězec uvažování je vždy vystaven.
 
 ```
 ŠKÁLA SKÓRE:               1.0 (extrémní bear) → 10.0 (extrémní bull)
@@ -25,22 +21,21 @@ ENGINE:                    Claude Opus (Anthropic)
 
 ---
 
-[2] PROČ TENHLE SYSTÉM EXISTUJE
+[2] PROČ SYSTÉM VZNIKNUL
 
-Před dvěma lety jsem se ztratil mezi „kup a drž" strategií a aktivním rozhodováním o riziku. Standardní zdroje pro drobné investory mají tři problémy: **metodologickou jednostrannost** (každý analytický framework má slepá místa), **narativní setrvačnost** (analytici drží své dřívější názory i když data říkají něco jiného) a **chybějící zodpovědnost** (predikce se nesledují systematicky).
+Běžný investor je ve svém rozhodování odkázan na standardní informační zdroje. a ty mají tři problémy: **metodologickou jednostrannost** (každý analytický framework má slepá místa), **narativní setrvačnost** (analytici drží své dřívější názory i když data říkají něco jiného) a **chybějící zodpovědnost** (predikce se nesledují systematicky).
 
-xmetrics řeší všechny tři:
+xmetrics řeší:
 
-- **Diverzifikace pohledů.** Pět agentů uvažuje nezávisle přes neslučitelné frameworky. Hodnota a cyklus (Marks), likvidita a peněžní toky (Druckenmiller), vnitřní hodnota (Damodaran), tail risk (Taleb) a cenová struktura (TA) se zřídka shodnou náhodou. Když konvergují, signál je silnější než kterákoliv jednotlivá metodologie.
+- **Diverzifikaci pohledů.** Pět agentů uvažuje nezávisle přes neslučitelné frameworky. Hodnota a cyklus (Marks), likvidita a peněžní toky (Druckenmiller), vnitřní hodnota (Damodaran), tail risk (Taleb) a cenová struktura (TA) se zřídka shodnou náhodou. Když konvergují, signál je silnější než kterákoliv jednotlivá metodologie.
 
 - **Contrarian test.** Když všech pět agentů ukazuje stejným směrem, super-agent musí aktivně formulovat protiargument. Není to zdvořilý ústupek — je to formální krok v pipeline. Konsenzus je často varování, ne potvrzení.
 
-- **Měřená přesnost.** Každá predikce přichází s triggery a datem ověření. Každý další report začíná zpětnou vazbou na ten předchozí. Agenti, kteří se opakovaně mýlí, mají sníženou váhu. Agenti, kteří se trefují, mají váhu posílenou. Systém se učí — a vidíte to.
+- **Měřená přesnost.** Každá predikce přichází s triggery a datem ověření. Každý další report začíná zpětnou vazbou na ten předchozí. Agenti, kteří se opakovaně mýlí, mají sníženou váhu. Agenti, kteří se trefují, mají váhu posílenou. Systém se dokáže učit.
 
 ---
 
 [3] ARCHITEKTURA SYSTÉMU
-
 
 -  D - Weekly Dataset --> 
 
@@ -54,9 +49,9 @@ xmetrics řeší všechny tři:
 
 ---
 
-[4] DATOVÁ VRSTVA — 100 METRIK, JEDEN ZDROJ PRAVDY
+4] DATOVÁ VRSTVA — 100 METRIK, JEDEN ZDROJ PRAVDY
 
-Každý pátek systém vygeneruje jediný kanonický dataset — `D_YYYY-MM-DD.csv` — který konzumují všichni agenti. To je záměrně: agenti musí uvažovat na základě striktně daných metrik. Jakákoli neshoda mezi nimi je tedy čistě metodologická, nikdy informační.
+Každý pátek systém vygeneruje jediný kanonický dataset — `D_YYYY-MM-DD.csv` — který využivají všichni agenti. To je záměrně: agenti musí uvažovat na základě striktně daných metrik. Jakákoli neshoda mezi nimi je tedy čistě metodologická, nikdy informační.
 
 Dataset pokrývá osm funkčních domén:
 
@@ -83,7 +78,7 @@ Každá metrika nese tři časové dimenze: `D-0` (den analýzy), `D-1` (předch
 
 Každý agent je modul uvažování, kalibrovaný k reprodukci metodologie referenčního analytika. Kalibrace pokrývá čtyři dimenze:
 
-- **Pilířová struktura.** Tematické čočky, kterými agent krájí data (Marks používá šest pilířů včetně Monetárního prostředí a Cyklické pozice; Taleb používá pět včetně Konvexity a Systémové fragility).
+- **Pilířová struktura.** Tématické čočky, kterými agent krájí data (Marks používá šest pilířů včetně Monetárního prostředí a Cyklické pozice; Taleb používá pět včetně Konvexity a Systémové fragility).
 - **Váhy pilířů.** Relativní důležitost každé čočky (Damodaran má Implied ERP 40 % své celkové váhy; Druckenmiller má Likviditu a Fed 30 %).
 - **Trigger jazyk.** Charakteristické vyjadřování, prahy a rétorika referenčního myslitele (např. Marksův „kyvadlový" frame sentimentu; Talebovo „fragility" hodnocení pozic).
 - **Kalibrace jistoty.** Jak agent vyjadřuje míru přesvědčení — Damodaran kotví explicitní matematické sensitivity tabulky; Marks mluví v rozpětích a pravděpodobnostech; Taleb se vyhýbá bodovým prognózám.
@@ -259,11 +254,11 @@ Celkový výstup na session: **přibližně 120–140 KB strukturované analýzy
 
 Pro srovnání: typický týdenní market wrap od velké banky má 8–15 KB textu bez falsifikovatelných tvrzení, bez skórování a bez transparentnosti metodologie. Institucionální buy-side research je delší, ale málokdy odhaluje vlastní vážicí logiku. xmetrics dělá obojí, každý týden, pro každou session — a je veřejně přístupný.
 
-> **Poznámka pro drobné investory:** Reporty R1–R6 jsou v angličtině. To je záměrně — používáme přesnou terminologii z investičního světa, kterou mnohé české překlady oslabí. Tato dokumentace a metriky jsou v češtině pro pochopení kontextu. Pokud potřebujete terminologii vysvětlit, podívejte se do glossáře v sekci [13].
+> **Poznámka pro drobné investory:** Reporty R1–R6 jsou v angličtině. To je záměrně — používáme přesnou terminologii z investičního světa, kterou mnohé české překlady oslabí. Tato dokumentace a metriky jsou v češtině pro pochopení kontextu. 
 
 ---
 
-[9] SYSTÉM SE UČÍ VEŘEJNĚ
+[9] SYSTÉM UČENÍ
 
 Každý report končí sekcí `[6]` nebo `[8]` obsahující blok falsifikovatelných hypotéz:
 
@@ -294,11 +289,11 @@ A váhy se odpovídajícím způsobem upraví. Postupem času toto produkuje **v
 
 xmetrics je postaven pro tři typy uživatelů:
 
-- **Drobní investoři s portfolii 500 tisíc – 5 milionů Kč**, kteří mají ve svém portfoliu ETF jádro a aktivně přemýšlejí o riziku. Kteří chtějí rozumět tomu, co se děje, ne jen kupovat ETF na základě doporučení. Kteří mají před sebou roky nebo dekády investování a vědí, že 50 viral momentů má menší hodnotu než 52 týdnů konzistentního myšlení.
+- **Investoři**, kteří mají ve svém portfoliu ETF jádro a aktivně přemýšlejí o riziku. Kteří chtějí rozumět tomu, co se děje, ne jen kupovat ETF na základě doporučení. Kteří mají před sebou roky nebo dekády investování a vědí, že 50 viral momentů má menší hodnotu než 52 týdnů konzistentního myšlení.
 
-- **Studenti tržní struktury**, kteří chtějí vidět, jak neslučitelné metodologie skutečně uvažují o stejných datech, jak se neshody řeší a jak vypadá disciplinovaný skórovací framework v praxi. Toto je vzdělávací nástroj — explicitně.
+- **Studenti**, kteří chtějí vidět, jak neslučitelné metodologie skutečně uvažují o stejných datech, jak se neshody řeší a jak vypadá disciplinovaný skórovací framework v praxi. Toto je vzdělávací nástroj — explicitně.
 
-- **Lidé, kterým chybí druhý názor.** Single-analyst research nese strukturální slabosti (jednostrannost, narativní setrvačnost). Mít k dispozici pět nezávislých metodologií současně, navíc s historickou auditní stopou, je něco, co normální drobný investor nezíská odnikud jinud.
+- **Lidé, kterým chybí druhý názor.** Single-analyst research nese strukturální slabosti (jednostrannost, narativní setrvačnost). Mít k dispozici pět nezávislých metodologií současně, navíc s historickou auditní stopou, je něco, co běžný investor nezíská z médií.
 
 xmetrics **není** postaven pro day tradery, options scalpers nebo kohokoli hledajícího intraday signály. Kadence je týdenní záměrně. Tržní struktura se mění na této časové škále; na kratších dominuje šum.
 
@@ -306,19 +301,18 @@ xmetrics **není** postaven pro day tradery, options scalpers nebo kohokoli hled
 
 [11] JAK ČÍST REPORT
 
-Pro lidi nové k formátu xmetrics — doporučené pořadí čtení týdenní session:
+Doporučené pořadí čtení týdenní session:
 
-1. **Otevřete `R6_YYYY-MM-DD.md`.** Přečtěte sekci `[1]` (CIO verdikt) a `[2]` (zpětná vazba na předchozí predikci). To je teze v ~500 slovech.
+1. **Otevřete `R6_YYYY-MM-DD.md`.** Přečtěte sekci `[1]` (CIO verdikt) a `[2]` (zpětná vazba na předchozí predikci).
 2. **Zkontrolujte seznam disqualifierů** v Executive Summary. Jakýkoli aktivní disqualifier přepisuje skóre na úrovni agentů — musíte vědět, které rails jsou aktivní, než budete číst dál.
 3. **Přečtěte sekci `[3A]` — Agent Dashboard.** Jednořádkové shrnutí per agent. Toto vám řekne, kde je konsenzus a kde dissent.
 4. **Pokud je konsenzus 5/5, skočte na Contrarian Test.** Toto je aktivní pokus CIO o falsifikaci konsenzu. Pokud test produkuje silné důkazy, verdikt je upgradován na vyšší confidence.
-5. **Přečtěte sekci `[4] — Konfrontační debata`** pro dimenzi, která vás zajímá nejvíc. Každá konfrontace produkuje přiřazení dominantního frameworku (časování vs. velikost).
+5. **Přečtěte sekci `[4] — Konfrontační debata`**. Každá konfrontace produkuje přiřazení dominantního frameworku (časování vs. velikost).
 6. **Skočte na sekci `[8] — AI Learning Metadata`.** Hypotézy vám řeknou, co přesně systém predikuje a jak se sám oskóruje příští týden.
 7. **Teprve potom**, pokud chcete hlubší detail, otevřete jednotlivé reporty agentů R1–R5.
 
 Čtení v tomto pořadí trvá ~15 minut a zachytí 90 % akčního obsahu.
 
-> **Tip pro drobné investory:** Pokud máte málo času, přečtěte si jen pondělní report na síti X.
 
 ---
 
