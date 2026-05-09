@@ -1,6 +1,3 @@
-ntní analýza S&P 500
-
-
 [1] O PROJEKTU
 
 xmetrics je týdenní analytický nástroj, který simuluje rozhodovací proces top hedge fondu. Každý pátek po uzavření amerického trhu je zachycen snímek **100 metrik** o trhu, makroekonomice, kreditu, sentimentu a opcích. Tento dataset projde **pěti virtuálními analytickými agenty**, jejichž uvažování je kalibrováno podle metodologií Howarda Markse, Stanleyho Druckenmillera, Aswatha Damodarana, Nassima Taleba a profesionálního technického analytika. Všech pět reportů pak dostane **CIO ředitel**, který je posuzuje výstupy agentů, vede mezi agenty debatu a syntetizuje finální investiční postoj.
