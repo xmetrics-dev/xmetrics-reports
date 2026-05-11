@@ -1,34 +1,41 @@
-[1] O PROJEKTU
+## Documentation
 
-xmetrics je týdenní analytický nástroj, který simuluje rozhodovací proces top hedge fondu. Každý pátek po uzavření amerického trhu je zachycen snímek **100 metrik** o trhu, makroekonomice, kreditu, sentimentu a opcích. Tento dataset projde **pěti virtuálními analytickými agenty**, jejichž uvažování je kalibrováno podle metodologií Howarda Markse, Stanleyho Druckenmillera, Aswatha Damodarana, Nassima Taleba a profesionálního technického analytika. Všech pět reportů pak dostane **CIO ředitel**, který je posuzuje výstupy agentů, vede mezi agenty debatu a syntetizuje finální investiční postoj.
 
-Engine pohánějící systém je **Anthropic Claude Opus**. Klíčová věc — systém si **pamatuje**. Tříúrovňová paměť (krátkodobá, střednědobá, dlouhodobá) umožňuje CIO sledovat predikci, penalizovat agenty, jejichž volání selhala, posilovat ty, kteří se trefili, dynamicky upravovat váhy a postupně zpřesňovat rozhodovací matici.
+[1] ABOUT THE PROJECT
 
-Cílem projektu je hlubší porozumění trhu SPX, co se děje pod povrchem jeho cenového vývoje. Každý závěr je **falsifikovatelný** (každý report obsahuje konkrétní hypotézy s datem ověření), každá změna vah je **auditovatelná** a celý řetězec uvažování je vždy vystaven.
+xmetrics is a weekly analytical AI framework that simulates the decision-making process of a top hedge fund. Every Friday after the US market closes, a snapshot of **100 metrics** on the US market, macroeconomics, credit, sentiment, and options is captured. This dataset is processed by **five virtual analytical agents**, whose reasoning is calibrated to the methodologies of Howard Marks, Stanley Druckenmiller, Aswath Damodaran, Nassim Taleb, and a professional technical analyst. All five reports are then delivered to the **CIO director**, who reviews the agents' outputs, conducts a debate among the agents, and synthesizes the final investment stance.
+
+The engine powering the system is **Anthropic Claude Opus**. The key thing — the system **remembers**. A three-tier memory (short-term, medium-term, long-term) allows the CIO to track predictions, penalize agents whose calls failed, reward those who got it right, dynamically adjust weights, and progressively refine the decision matrix.
+
+The goal of the project is a deeper understanding of the SPX market — what is happening beneath the surface of its price action. Every conclusion is **falsifiable** (each report contains specific hypotheses with a verification date), every weight change is **auditable**, and the entire chain of reasoning is always on display.
 
 ```
-ŠKÁLA SKÓRE:               1.0 (extrémní bear) → 10.0 (extrémní bull)
-AGENTI:                    5 nezávislých agentů + 1 agent (CIO)
-METRIK NA ANALÝZU:         ~100
-FREKVENCE:                 Týdně (pátky, po uzávěru)
-UČÍCÍ SMYČKA:              3-úrovňová (týdně / kvartálně / kumulativně)
-FALSIFIKOVATELNOST:        Každý report obsahuje testovatelné hypotézy
+SCORE SCALE:               1.0 (extreme bear) → 10.0 (extreme bull)
+AGENTS:                    5 independent agents + 1 agent (CIO)
+METRICS PER ANALYSIS:      ~100
+FREQUENCY:                 Weekly (Fridays, post-close)
+LEARNING LOOP:             3-tier (weekly / quarterly / cumulative)
+FALSIFIABILITY:            Each report contains testable hypotheses
 ENGINE:                    Claude Opus (Anthropic)
 ```
 
 ---
 
-[2] PROČ SYSTÉM VZNIKNUL
+[2] WHY THE SYSTEM EXISTS
 
-Běžný investor je ve svém rozhodování odkázan na standardní informační zdroje. a ty mají tři problémy: **metodologickou jednostrannost** (každý analytický framework má slepá místa), **narativní setrvačnost** (analytici drží své dřívější názory i když data říkají něco jiného) a **chybějící zodpovědnost** (predikce se nesledují systematicky).
+The ordinary investor is, in their decision-making, dependent on standard information sources. And those have three problems: **methodological one-sidedness** (every analytical framework has blind spots), **narrative inertia** (analysts cling to their earlier views even when the data say something else), and **a lack of accountability** (predictions are not tracked systematically).
 
-xmetrics řeší:
+xmetrics addresses:
 
-- **Diverzifikaci pohledů.** Pět agentů uvažuje nezávisle přes neslučitelné frameworky. Hodnota a cyklus (Marks), likvidita a peněžní toky (Druckenmiller), vnitřní hodnota (Damodaran), tail risk (Taleb) a cenová struktura (TA) se zřídka shodnou náhodou. Když konvergují, signál je silnější než kterákoliv jednotlivá metodologie.
+- **Diversification of perspectives.** Five agents reason independently across incompatible frameworks. Value and cycle (Marks), liquidity and money flows (Druckenmiller), intrinsic value (Damodaran), tail risk (Taleb), and price structure (TA) rarely agree by chance. When they converge, the signal is stronger than any single methodology.
 
-- **Contrarian test.** Když všech pět agentů ukazuje stejným směrem, super-agent musí aktivně formulovat protiargument. Není to zdvořilý ústupek — je to formální krok v pipeline. Konsenzus je často varování, ne potvrzení.
+- **Contrarian test.** When all five agents point in the same direction, the super-agent must actively formulate a counter-argument. This is not a polite concession — it is a formal step in the pipeline. Consensus is often a warning, not a confirmation.
 
-- **Měřená přesnost.** Každá predikce přichází s triggery a datem ověření. Každý další report začíná zpětnou vazbou na ten předchozí. Agenti, kteří se opakovaně mýlí, mají sníženou váhu. Agenti, kteří se trefují, mají váhu posílenou. Systém se dokáže učit.
+- **Measured accuracy.** Every prediction comes with triggers and a verification date. Every subsequent report starts with feedback on the previous one. Agents who are repeatedly wrong have their weight reduced. Agents who hit the mark have their weight strengthened. The system is able to learn.
+
+---
+
+[3] SYSTEM ARCHITECTURE
 
 ---
 
@@ -46,394 +53,396 @@ xmetrics řeší:
 
 ---
 
-4] DATOVÁ VRSTVA — 100 METRIK, JEDEN ZDROJ PRAVDY
+[4] DATA LAYER — 100 METRICS, ONE SOURCE OF TRUTH
 
-Každý pátek systém vygeneruje jediný kanonický dataset — `D_YYYY-MM-DD.csv` — který využivají všichni agenti. To je záměrně: agenti musí uvažovat na základě striktně daných metrik. Jakákoli neshoda mezi nimi je tedy čistě metodologická, nikdy informační.
+Every Friday the system generates a single canonical dataset — `D_YYYY-MM-DD.csv` — used by all agents. This is intentional: agents must reason from a strictly fixed set of metrics. Any disagreement between them is therefore purely methodological, never informational.
 
-Dataset pokrývá osm funkčních domén:
+The dataset covers eight functional domains:
 
 ```
-| Doména                | Reprezentativní metriky                                                  |
+| Domain                | Representative metrics                                                   |
 |-----------------------|--------------------------------------------------------------------------|
-| Cena a technika       | SPX_CLOSE, SMA_50, SMA_200, VWAP_ANCHORED, Fib retracement, RSI, MACD, ADX |
-| Objem a flow          | VOL_RATIO, OBV_TREND, MFI_14, CMF_20, UP_VOL_PCT_5D                      |
-| Šíře a rotace         | SPXA50R, SPXA200R, MAG7_REL, RUT_IWM_REL, XLF/XLE/XLK relativní síla     |
-| Volatilita            | VIX, SKEW, SKEW/VIX ratio, VIX termová struktura, realizovaná vs. implied |
-| GEX / opce            | GEX_FLIP, CALL_WALL, PUT_WALL, GEX_NET_VALUE, GEX_REGIME                 |
-| Makro a sazby         | FFR, 10Y / 2Y / 3M, M2, RRP, reálné sazby, DXY, zlato, ropa              |
-| Valuace               | ERP, CAPE, P/E TTM, Forward P/E, Buffett Indicator, HY/IG credit spreads |
-| Sentiment a ekonomika | AAII, Margin Debt, CNN F&G, ISM, Consumer Sentiment, NFP, PCE, SLOOS     |
+| Price and technicals  | SPX_CLOSE, SMA_50, SMA_200, VWAP_ANCHORED, Fib retracement, RSI, MACD, ADX |
+| Volume and flow       | VOL_RATIO, OBV_TREND, MFI_14, CMF_20, UP_VOL_PCT_5D                      |
+| Breadth and rotation  | SPXA50R, SPXA200R, MAG7_REL, RUT_IWM_REL, XLF/XLE/XLK relative strength  |
+| Volatility            | VIX, SKEW, SKEW/VIX ratio, VIX term structure, realized vs. implied      |
+| GEX / options         | GEX_FLIP, CALL_WALL, PUT_WALL, GEX_NET_VALUE, GEX_REGIME                 |
+| Macro and rates       | FFR, 10Y / 2Y / 3M, M2, RRP, real rates, DXY, gold, oil                  |
+| Valuation             | ERP, CAPE, P/E TTM, Forward P/E, Buffett Indicator, HY/IG credit spreads |
+| Sentiment and economy | AAII, Margin Debt, CNN F&G, ISM, Consumer Sentiment, NFP, PCE, SLOOS     |
 ```
 
-Každá metrika nese tři časové dimenze: `D-0` (den analýzy), `D-1` (předchozí session), `D-5` (jeden obchodní týden zpět). U pomaleji se vyvíjejících makro řad (měsíční PCE, týdenní jobless claims) jsou sloupce `D-1` a `D-5` záměrně označeny `—`.
+Each metric carries three time dimensions: `D-0` (analysis day), `D-1` (previous session), `D-5` (one trading week back). For slower-evolving macro series (monthly PCE, weekly jobless claims), the `D-1` and `D-5` columns are intentionally marked `—`.
 
-**Datová úplnost je sledována explicitně.** Pokud chybí kritická metrika, super-agent sníží svoje confidence pásmo a sníží váhu dotčenému agentovi pro danou session. Systém nikdy nepředstírá, že má informaci, kterou nemá.
+**Data completeness is tracked explicitly.** If a critical metric is missing, the super-agent lowers its confidence band and reduces the weight of the affected agent for that session. The system never pretends to have information it does not.
 
 ---
 
-[5] AGENTNÍ VRSTVA — PĚT METODOLOGIÍ, JEDEN DATASET
+[5] AGENT LAYER — FIVE METHODOLOGIES, ONE DATASET
 
-Každý agent je modul uvažování, kalibrovaný k reprodukci metodologie referenčního analytika. Kalibrace pokrývá čtyři dimenze:
+Each agent is a reasoning module, calibrated to reproduce the methodology of a reference analyst. The calibration covers four dimensions:
 
-- **Pilířová struktura.** Tématické čočky, kterými agent krájí data (Marks používá šest pilířů včetně Monetárního prostředí a Cyklické pozice; Taleb používá pět včetně Konvexity a Systémové fragility).
-- **Váhy pilířů.** Relativní důležitost každé čočky (Damodaran má Implied ERP 40 % své celkové váhy; Druckenmiller má Likviditu a Fed 30 %).
-- **Trigger jazyk.** Charakteristické vyjadřování, prahy a rétorika referenčního myslitele (např. Marksův „kyvadlový" frame sentimentu; Talebovo „fragility" hodnocení pozic).
-- **Kalibrace jistoty.** Jak agent vyjadřuje míru přesvědčení — Damodaran kotví explicitní matematické sensitivity tabulky; Marks mluví v rozpětích a pravděpodobnostech; Taleb se vyhýbá bodovým prognózám.
+- **Pillar structure.** The thematic lenses through which the agent slices the data (Marks uses six pillars including Monetary Environment and Cyclical Position; Taleb uses five including Convexity and Systemic Fragility).
+- **Pillar weights.** The relative importance of each lens (Damodaran assigns Implied ERP 40% of his total weight; Druckenmiller gives Liquidity and Fed 30%).
+- **Trigger language.** The characteristic phrasing, thresholds, and rhetoric of the reference thinker (e.g., Marks's "pendulum" frame for sentiment; Taleb's "fragility" rating of positions).
+- **Confidence calibration.** How the agent expresses conviction — Damodaran anchors explicit mathematical sensitivity tables; Marks speaks in ranges and probabilities; Taleb avoids point forecasts.
 
-5A — Sestava agentů
-
-```
-R1 — HOWARD MARKS              Hodnota, pozice v cyklu, kyvadlo sentimentu
-    Pilíře:       Monetární | Valuace | Sentiment | Ekonomika | Kredit | Cross-Asset
-    Hlavní váha:  Valuace + Kredit
-    Podpis:       „Kde jsme v cyklu?" — mapování asymetrie
-
-R2 — STANLEY DRUCKENMILLER     Makro likvidita a flow
-    Pilíře:       Likvidita & Fed | Yield Curve / Kredit | Valuace | Sentiment | Cyklus | Cross-Asset
-    Hlavní váha:  Likvidita 30 %
-    Podpis:       Anticipativní pozicování podle režimu likvidity centrálních bank
-
-R3 — ASWATH DAMODARAN          Vnitřní hodnota (DCF / ERP)
-    Pilíře:       Tržní oceňování | Implied ERP | Makro prostředí | Risk Premium
-    Hlavní váha:  ERP 40 %
-    Podpis:       Explicitní fair-value sensitivity tabulky; žádné bodové prognózy
-
-R4 — NASSIM TALEB              Tail risk, konvexita, systémová fragilita
-    Pilíře:       Tail Risk | Konvexita & Payoff | Systémová fragilita | Black Swan blízkost | Cross-Asset
-    Hlavní váha:  Tail struktury
-    Podpis:       Fragility skóre; barbell pozicování; detekce Dual Complacency
-
-R5 — TECHNICKÁ ANALÝZA         Cena, momentum, mikrostruktura opcí
-    Pilíře:       Trend & Struktura | Momentum | Volume & Flow | GEX / Opce | Šíře | Makro TA kontext
-    Hlavní váha:  GEX + Šíře
-    Podpis:       Fibonacci / VWAP konfluence; Elliott Wave count; GEX režim
-
-R6 — CIO SUPER-AGENT           Mezi-agentní syntéza a rozhodčí
-    Pilíře:       (Neaplikovatelné — pracuje na výstupech agentů, ne na surových metrikách)
-    Hlavní váha:  Dynamická — re-balancuje agenty každou session
-    Podpis:       Konfrontační debata; contrarian testing; aplikace disqualifierů
-```
-
-5B — Anatomie reportu agenta
-
-Každý report R1–R5 má pevnou strukturu:
+5A — Agent lineup
 
 ```
-[1] EXECUTIVE SUMMARY        — Skóre, fáze cyklu, asymetrie, postoj, primární trigger
-[2] DATASET — VALUES READ    — Explicitní zopakování použitých vstupních dat
-[3] PILLAR ANALYSIS          — Hloubkový rozbor každého tematického pilíře (skóre 1–10)
-[4] SYNTHETIC DECISION MATRIX — Vážené skóre, konzistence signálů, R/R
-[5] AGENT CONCLUSION         — Pozice, triggery změny, allocation breakdown
-[6] AI LEARNING METADATA     — Falsifikovatelné hypotézy, trigger události, feedback smyčka
+R1 — HOWARD MARKS              Value, position in the cycle, sentiment pendulum
+    Pillars:       Monetary | Valuation | Sentiment | Economy | Credit | Cross-Asset
+    Main weight:   Valuation + Credit
+    Signature:     "Where are we in the cycle?" — mapping asymmetry
+
+R2 — STANLEY DRUCKENMILLER     Macro liquidity and flows
+    Pillars:       Liquidity & Fed | Yield Curve / Credit | Valuation | Sentiment | Cycle | Cross-Asset
+    Main weight:   Liquidity 30%
+    Signature:     Anticipatory positioning by central-bank liquidity regime
+
+R3 — ASWATH DAMODARAN          Intrinsic value (DCF / ERP)
+    Pillars:       Market Valuation | Implied ERP | Macro Environment | Risk Premium
+    Main weight:   ERP 40%
+    Signature:     Explicit fair-value sensitivity tables; no point forecasts
+
+R4 — NASSIM TALEB              Tail risk, convexity, systemic fragility
+    Pillars:       Tail Risk | Convexity & Payoff | Systemic Fragility | Black Swan proximity | Cross-Asset
+    Main weight:   Tail structures
+    Signature:     Fragility score; barbell positioning; Dual Complacency detection
+
+R5 — TECHNICAL ANALYSIS        Price, momentum, options microstructure
+    Pillars:       Trend & Structure | Momentum | Volume & Flow | GEX / Options | Breadth | Macro TA context
+    Main weight:   GEX + Breadth
+    Signature:     Fibonacci / VWAP confluence; Elliott Wave count; GEX regime
+
+R6 — CIO SUPER-AGENT           Inter-agent synthesis and arbiter
+    Pillars:       (Not applicable — works on agent outputs, not raw metrics)
+    Main weight:   Dynamic — re-balances agents every session
+    Signature:     Confrontational debate; contrarian testing; application of disqualifiers
 ```
 
-Sekce `[6]` není kosmetická. Je to **strojově čitelná smlouva** mezi tímto reportem a tím dalším. Každá hypotéza zde uvedená bude vyhodnocena ve zpětné vazbě další session.
+5B — Anatomy of an agent report
 
-5C — Návaznost na předchozí reporty
+Each R1–R5 report has a fixed structure:
 
-Každý agent dostane nejen aktuální dataset, ale také **svůj vlastní předchozí report** (plus předchozí verdikt super-agenta). Před vytvořením této analýzy musí agent:
+```
+[1] EXECUTIVE SUMMARY        — Score, cycle phase, asymmetry, stance, primary trigger
+[2] DATASET — VALUES READ    — Explicit restatement of the input data used
+[3] PILLAR ANALYSIS          — In-depth breakdown of each thematic pillar (score 1–10)
+[4] SYNTHETIC DECISION MATRIX — Weighted score, signal consistency, R/R
+[5] AGENT CONCLUSION         — Position, change triggers, allocation breakdown
+[6] AI LEARNING METADATA     — Falsifiable hypotheses, trigger events, feedback loop
+```
 
-1. Přečíst své dřívější volání.
-2. Posoudit, jak se trh vyvinul vůči jeho triggerům.
-3. Identifikovat, co se trefilo a co minul.
-4. Explicitně uvést, které postoje jsou nyní upgrade, downgrade nebo beze změny.
+Section `[6]` is not cosmetic. It is a **machine-readable contract** between this report and the next. Every hypothesis stated here will be evaluated in the feedback section of the following session.
 
-Tím vzniká **kontinuita myšlení bez závislosti na minulém směru**. Agent může své stanovisko obrátit — ale jen pokud přizná chybu a vysvětlí, jaká nová informace pohled změnila.
+5C — Continuity with previous reports
+
+Each agent receives not only the current dataset, but also **its own previous report** (plus the super-agent's previous verdict). Before producing this analysis, the agent must:
+
+1. Read its earlier call.
+2. Assess how the market evolved relative to its triggers.
+3. Identify what it got right and what it missed.
+4. Explicitly state which stances are now upgraded, downgraded, or unchanged.
+
+This produces **continuity of thinking without dependence on the previous direction**. The agent can reverse its position — but only if it admits the mistake and explains what new information changed the view.
 
 ---
 
-[6] CIO VRSTVA — ROZHODČÍ, DEBATA A VERDIKT
+[6] CIO LAYER — ARBITER, DEBATE, AND VERDICT
 
-Super-agent zpracuje pět reportů + surový dataset a vyprodukuje `R6_YYYY-MM-DD.md`. Tady systém získává svou hodnotu. Naivní průměr pěti skóre by byl bez hodnoty. CIO dělá čtyři věci, které žádný jednotlivý agent dělat nemůže:
+The super-agent processes the five reports + the raw dataset and produces `R6_YYYY-MM-DD.md`. This is where the system gains its value. A naive average of the five scores would be worthless. The CIO does four things no single agent can:
 
-6A — Detekce sdílených dat vs. nezávislého signálu
+6A — Detection of shared data vs. independent signal
 
-R1 (Marks) a R2 (Druckenmiller) sdílejí přibližně 85 % své datové báze (oba jsou makro-orientovaní). Pokud souhlasí, ta shoda váží zhruba **1,2×** jednoho agenta — ne 2× nezávislé potvrzení. CIO aplikuje korekci překryvu (typicky −0,07 na finální skóre), kdykoli tito dva směřují stejným směrem. To brání systému dvojitě započítat to, co je v podstatě jedna metodologie čtená dvěma způsoby.
+R1 (Marks) and R2 (Druckenmiller) share approximately 85% of their data base (both are macro-oriented). If they agree, that agreement weighs roughly **1.2×** one agent — not 2× independent confirmation. The CIO applies an overlap correction (typically −0.07 to the final score) whenever these two point in the same direction. This prevents the system from double-counting what is essentially one methodology read in two ways.
 
-Skutečně nezávislé metodologie v sestavě: R3 (čistá valuační matematika), R4 (fragilita / geometrie payoffů), R5 (cena a struktura opcí). Když některá z nich nezávisle potvrdí R1+R2, signál získá skutečnou cross-metodologickou váhu.
+The truly independent methodologies in the lineup: R3 (pure valuation math), R4 (fragility / payoff geometry), R5 (price and options structure). When any of these independently confirms R1+R2, the signal earns real cross-methodological weight.
 
-6B — Konfrontační debata
+6B — Confrontational debate
 
-Když agenti nesouhlasí — nebo když všichni souhlasí a je vyžadován contrarian test — CIO simuluje explicitní debatu:
-
-```
-KONFRONTACE 1 — Valuace (R3) vs. Technická struktura (R5)
-  POZICE R3:        CAPE fair value = 3 012–3 897 → SPX nadhodnocen 45–58 %
-  PŘÍMÁ VÝZVA:      R5 — GEX +2,00G, Market Makers prodávají rally / kupují poklesy → mechanická podlaha
-  R6 VERDIKT:       Oba mají pravdu na různých horizontech. R3 = velikost a směr.
-                    R5 = časový mechanismus odkládající obrat. Syntéza: prolomení
-                    GEX Flip 7 000 uvolní nahromaděnou kompresi nelineárně.
-```
-
-Každá konfrontace je rozřešena explicitním **přiřazením dominantního frameworku** — která metodologie řídí časování, která velikost, a za jakých podmínek by se to přiřazení obrátilo.
-
-6C — Aplikace disqualifierů
-
-Některé podmínky jsou dostatečně silné, aby **přepsaly skóre na úrovni agentů bez ohledu na konsenzus**. To jsou tvrdé bezpečnostní rails systému:
-
+When the agents disagree — or when they all agree and a contrarian test is required — the CIO simulates an explicit debate:
 
 ```
-| Disqualifier                 | Trigger                                    | Dopad                                          |
-|------------------------------|--------------------------------------------|------------------------------------------------|
-| BREADTH_COLLAPSE             | SPXA200R < 30 % AND klesá                  | Skóre R6 −1,5 (po haircutu z R5 floor: −0,75)  |
-| BREADTH_ALERT                | SPXA200R < 20 %                            | Skóre R5 −1,0 přídavně                         |
-| ETF_DISQ_R6                  | 3-of-3 koncentrace mega-cap rally          | Skóre R6 −1,0 (po haircutu: −0,5)              |
-| VIX_BACKWARDATION            | VIX termová struktura < 0                  | Absolutní disqualifikace dlouhých pozic        |
-| SKEW_VIX_>7                  | SKEW/VIX ratio > 7,0                       | Modifier −0,30                                 |
-| DUAL_COMPLACENCY-ERP         | ERP < 0 % AND VIX < 15 (oba současně)      | Skóre R6 −1,0; R4 váha +20 %                   |
-| TOPPING_ALERT                | EW Wave 5 + RSI_DIV + DELTA_MACD klesající | Skóre −0,5                                     |
+CONFRONTATION 1 — Valuation (R3) vs. Technical structure (R5)
+  R3 POSITION:      CAPE fair value = 3,012–3,897 → SPX overvalued by 45–58%
+  DIRECT CHALLENGE: R5 — GEX +2.00G, Market Makers sell rallies / buy dips → mechanical floor
+  R6 VERDICT:       Both are right on different horizons. R3 = magnitude and direction.
+                    R5 = the timing mechanism delaying the turn. Synthesis: a break
+                    of GEX Flip 7,000 releases the accumulated compression non-linearly.
+```
+
+Each confrontation is resolved by an explicit **dominant framework assignment** — which methodology governs timing, which magnitude, and under what conditions that assignment would flip.
+
+6C — Application of disqualifiers
+
+Some conditions are strong enough to **override agent-level scores regardless of consensus**. These are the system's hard safety rails:
+
+
+```
+| Disqualifier                 | Trigger                                    | Impact                                          |
+|------------------------------|--------------------------------------------|-------------------------------------------------|
+| BREADTH_COLLAPSE             | SPXA200R < 30% AND falling                 | R6 score −1.5 (after haircut from R5 floor: −0.75) |
+| BREADTH_ALERT                | SPXA200R < 20%                             | R5 score −1.0 additionally                      |
+| ETF_DISQ_R6                  | 3-of-3 mega-cap rally concentration        | R6 score −1.0 (after haircut: −0.5)             |
+| VIX_BACKWARDATION            | VIX term structure < 0                     | Absolute disqualification of long positions     |
+| SKEW_VIX_>7                  | SKEW/VIX ratio > 7.0                       | Modifier −0.30                                  |
+| DUAL_COMPLACENCY-ERP         | ERP < 0% AND VIX < 15 (simultaneously)     | R6 score −1.0; R4 weight +20%                   |
+| TOPPING_ALERT                | EW Wave 5 + RSI_DIV + DELTA_MACD falling   | Score −0.5                                      |
 
 ```
 
-Disqualifiers jsou v každém R6 reportu uvedeny explicitně — vždy vidíte, které rails byly aktivní.
+Disqualifiers are listed explicitly in every R6 report — you always see which rails were active.
 
-6D — Re-balance vah agentů
+6D — Re-balancing of agent weights
 
-Základní váhy nejsou pevné. **Modifikují se každou session** podle dvou faktorů:
+The base weights are not fixed. **They are modified every session** based on two factors:
 
-1. **Tržní režim.** Pokud je ERP záporné (Dual Complacency), tail-risk váha Taleba se posiluje. Pokud volatilní struktura signalizuje GEX-dominovaný režim, posiluje se TA. Pokud je kredit pod stresem, posiluje se Druckenmiller.
-2. **Historická přesnost.** Agenti, jejichž předchozí predikce ověřily, mají váhu v té session vynásobenou **1,05×**; agenti, jejichž predikce dvakrát po sobě selhaly, mají váhu vynásobenou **0,90×**. Tady je dlouhopaměťová učící smyčka v praxi.
+1. **Market regime.** If ERP is negative (Dual Complacency), Taleb's tail-risk weight is boosted. If the volatility structure signals a GEX-dominated regime, TA is boosted. If credit is under stress, Druckenmiller is boosted.
+2. **Historical accuracy.** Agents whose previous predictions verified have their weight in that session multiplied by **1.05×**; agents whose predictions failed two times in a row have their weight multiplied by **0.90×**. This is the long-memory learning loop in practice.
 
-Každá úprava váhy je zalogována v sekci `[8B] — Weights Used in This Report` a je tedy plně auditovatelná.
+Every weight adjustment is logged in section `[8B] — Weights Used in This Report` and is therefore fully auditable.
 
 ---
 
-[7] PAMĚŤOVÁ ARCHITEKTURA
+[7] MEMORY ARCHITECTURE
 
-Většina AI analytických systémů je bezstavová. xmetrics záměrně není. Pracuje na třech časových škálách:
+Most AI analytical systems are stateless. xmetrics intentionally is not. It operates on three timescales:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  KRÁTKODOBÁ PAMĚŤ        (1 týden)                              │
+│  SHORT-TERM MEMORY        (1 week)                              │
 │  ─────────────────────────────────────                          │
-│  Každý agent čte svůj vlastní předchozí report. Každý CIO       │
-│  verdikt odkazuje na předchozí R6 report. Kontinuita je         │
-│  povinná — agent, který obrací názor, musí tu reverzaci         │
-│  explicitně přiznat a zdůvodnit.                                │
+│  Each agent reads its own previous report. Each CIO             │
+│  verdict references the previous R6 report. Continuity is       │
+│  mandatory — an agent reversing its view must explicitly        │
+│  acknowledge and justify that reversal.                         │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
-│  STŘEDNĚDOBÁ PAMĚŤ       (kvartálně, 12–13 reportů)             │
+│  MEDIUM-TERM MEMORY       (quarterly, 12–13 reports)            │
 │  ─────────────────────────────────────                          │
-│  CIO sleduje hit rate na každé falsifikovatelné hypotéze.       │
-│  Kvartální rekalibrace vah. Identifikace změn režimu, které     │
-│  způsobí zastarání minulých vah. Detekce agentů, kteří jsou     │
-│  systematicky brzy nebo pozdě.                                  │
+│  The CIO tracks the hit rate on every falsifiable hypothesis.   │
+│  Quarterly weight recalibration. Identification of regime       │
+│  shifts that render past weights obsolete. Detection of agents  │
+│  who are systematically early or late.                          │
 └─────────────────────────────────────────────────────────────────┘
 ┌─────────────────────────────────────────────────────────────────┐
-│  DLOUHODOBÁ PAMĚŤ        (kumulativně, všechny session)         │
+│  LONG-TERM MEMORY         (cumulative, all sessions)            │
 │  ─────────────────────────────────────                          │
-│  Plná historie každé predikce, výsledku a změny vah.            │
-│  Pohání strukturální revize: nové metriky (např. SPXA50R bylo   │
-│  povýšeno na povinné po dubnové session 2026), zpřesnění prahů  │
-│  disqualifierů, rozšíření šablon konfrontací, potenciálně noví  │
-│  agenti.                                                        │
+│  Full history of every prediction, outcome, and weight change.  │
+│  Drives structural revisions: new metrics (e.g., SPXA50R was    │
+│  promoted to mandatory after the April 2026 session),           │
+│  refinement of disqualifier thresholds, expansion of            │
+│  confrontation templates, potentially new agents.               │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-[8] VÝSTUPNÍ KVALITA — CO KONKRÉTNĚ DOSTANETE
+[8] OUTPUT QUALITY — WHAT YOU CONCRETELY GET
 
-Kompletní týdenní session produkuje sedm artefaktů:
+A complete weekly session produces seven artifacts:
 
 ```
 reports/YYYY-MM-DD/
-├── D_YYYY-MM-DD.csv       ~100 metrik, tři časové dimenze, explicitní jednotky
+├── D_YYYY-MM-DD.csv       ~100 metrics, three time dimensions, explicit units
 ├── R1_YYYY-MM-DD.md       Howard Marks report (~14–18 KB)
 ├── R2_YYYY-MM-DD.md       Druckenmiller report (~11–15 KB)
 ├── R3_YYYY-MM-DD.md       Damodaran report (~12–14 KB)
 ├── R4_YYYY-MM-DD.md       Taleb report (~15–17 KB)
-├── R5_YYYY-MM-DD.md       Technický analytik report (~26–30 KB)
-└── R6_YYYY-MM-DD.md       CIO syntéza (~30–35 KB)
+├── R5_YYYY-MM-DD.md       Technical analyst report (~26–30 KB)
+└── R6_YYYY-MM-DD.md       CIO synthesis (~30–35 KB)
 ```
 
-Celkový výstup na session: **přibližně 120–140 KB strukturované analýzy**, rozčleněné podle domény, prokřížené s pěti neslučitelnými frameworky a syntetizované do jediného akčního verdiktu s explicitními triggery.
+Total output per session: **approximately 120–140 KB of structured analysis**, broken down by domain, cross-checked against five incompatible frameworks, and synthesized into a single actionable verdict with explicit triggers.
 
-Pro srovnání: typický týdenní market wrap od velké banky má 8–15 KB textu bez falsifikovatelných tvrzení, bez skórování a bez transparentnosti metodologie. Institucionální buy-side research je delší, ale málokdy odhaluje vlastní vážicí logiku. xmetrics dělá obojí, každý týden, pro každou session — a je veřejně přístupný.
+For comparison: a typical weekly market wrap from a major bank has 8–15 KB of text with no falsifiable claims, no scoring, and no methodology transparency. Institutional buy-side research is longer but rarely reveals its own weighting logic. xmetrics does both, every week, for every session — and it is publicly accessible.
 
-> **Poznámka pro drobné investory:** Reporty R1–R6 jsou v angličtině. To je záměrně — používáme přesnou terminologii z investičního světa, kterou mnohé české překlady oslabí. Tato dokumentace a metriky jsou v češtině pro pochopení kontextu. 
+> **Note for retail investors:** Reports R1–R6 are in English. This is intentional — we use precise terminology from the investment world that many translations would dilute. This documentation and the metrics reference are provided for context. 
 
 ---
 
-[9] SYSTÉM UČENÍ
+[9] LEARNING SYSTEM
 
-Každý report končí sekcí `[6]` nebo `[8]` obsahující blok falsifikovatelných hypotéz:
+Each report ends with section `[6]` or `[8]` containing a block of falsifiable hypotheses:
 
 ```
-H1 (Šíře + Cyklus):
-  SPX nedrží ATH déle než 3 týdny při SPXA50R <15 %
-  → do 2026-05-10 SPX pod 7 000
-  Verifikace: SPX close + SPXA50R na 2026-05-10
+H1 (Breadth + Cycle):
+  SPX does not hold an ATH for more than 3 weeks with SPXA50R <15%
+  → by 2026-05-10 SPX below 7,000
+  Verification: SPX close + SPXA50R on 2026-05-10
 
-H2 (Likvidita + TA):
-  Bear steepener + GEX Flip blízkost
-  → 10Y dosahuje 4,6 % do 2026-05-15 a SPX koriguje −5 až −10 %
-  Verifikace: 10Y yield + SPX na 2026-05-15
+H2 (Liquidity + TA):
+  Bear steepener + GEX Flip proximity
+  → 10Y reaches 4.6% by 2026-05-15 and SPX corrects by −5 to −10%
+  Verification: 10Y yield + SPX on 2026-05-15
 ```
 
-Na 2026-05-15 další týdenní report otevírá:
+On 2026-05-15 the next weekly report opens with:
 
 ```
 H1: VERIFIED / FAILED / PARTIALLY VERIFIED
 H2: VERIFIED / FAILED / PARTIALLY VERIFIED
 ```
 
-A váhy se odpovídajícím způsobem upraví. Postupem času toto produkuje **veřejný záznam přesnosti per agent** — Marksův hit rate, Druckenmillerův hit rate, agregátní hit rate systému. Institucionální research toto nepublikuje. xmetrics ano, protože transparentnost je jediný způsob, jak může systém ospravedlnit váhy, které sám sobě přiděluje.
+And the weights adjust accordingly. Over time this produces a **public per-agent accuracy record** — Marks's hit rate, Druckenmiller's hit rate, the system's aggregate hit rate. Institutional research does not publish this. xmetrics does, because transparency is the only way the system can justify the weights it assigns to itself.
 
 ---
 
-[10] PRO KOHO JE TO POSTAVENO
+[10] WHO IT IS BUILT FOR
 
-xmetrics je postaven pro tři typy uživatelů:
+xmetrics is built for three types of users:
 
-- **Investoři**, kteří mají ve svém portfoliu ETF jádro a aktivně přemýšlejí o riziku. Kteří chtějí rozumět tomu, co se děje, ne jen kupovat ETF na základě doporučení. Kteří mají před sebou roky nebo dekády investování a vědí, že 50 viral momentů má menší hodnotu než 52 týdnů konzistentního myšlení.
+- **Investors** who hold an ETF core in their portfolio and actively think about risk. Who want to understand what is going on, not just buy ETFs on someone's recommendation. Who have years or decades of investing ahead of them and know that 50 viral moments are worth less than 52 weeks of consistent thinking.
 
-- **Studenti**, kteří chtějí vidět, jak neslučitelné metodologie skutečně uvažují o stejných datech, jak se neshody řeší a jak vypadá disciplinovaný skórovací framework v praxi. Toto je vzdělávací nástroj — explicitně.
+- **Students** who want to see how incompatible methodologies actually reason about the same data, how disagreements are resolved, and what a disciplined scoring framework looks like in practice. This is an educational tool — explicitly.
 
-- **Lidé, kterým chybí druhý názor.** Single-analyst research nese strukturální slabosti (jednostrannost, narativní setrvačnost). Mít k dispozici pět nezávislých metodologií současně, navíc s historickou auditní stopou, je něco, co běžný investor nezíská z médií.
+- **People who lack a second opinion.** Single-analyst research carries structural weaknesses (one-sidedness, narrative inertia). Having five independent methodologies available at once, plus a historical audit trail, is something an ordinary investor will not get from the media.
 
-xmetrics **není** postaven pro day tradery, options scalpers nebo kohokoli hledajícího intraday signály. Kadence je týdenní záměrně. Tržní struktura se mění na této časové škále; na kratších dominuje šum.
-
----
-
-[11] JAK ČÍST REPORT
-
-Doporučené pořadí čtení týdenní session:
-
-1. **Otevřete `R6_YYYY-MM-DD.md`.** Přečtěte sekci `[1]` (CIO verdikt) a `[2]` (zpětná vazba na předchozí predikci).
-2. **Zkontrolujte seznam disqualifierů** v Executive Summary. Jakýkoli aktivní disqualifier přepisuje skóre na úrovni agentů — musíte vědět, které rails jsou aktivní, než budete číst dál.
-3. **Přečtěte sekci `[3A]` — Agent Dashboard.** Jednořádkové shrnutí per agent. Toto vám řekne, kde je konsenzus a kde dissent.
-4. **Pokud je konsenzus 5/5, skočte na Contrarian Test.** Toto je aktivní pokus CIO o falsifikaci konsenzu. Pokud test produkuje silné důkazy, verdikt je upgradován na vyšší confidence.
-5. **Přečtěte sekci `[4] — Konfrontační debata`**. Každá konfrontace produkuje přiřazení dominantního frameworku (časování vs. velikost).
-6. **Skočte na sekci `[8] — AI Learning Metadata`.** Hypotézy vám řeknou, co přesně systém predikuje a jak se sám oskóruje příští týden.
-7. **Teprve potom**, pokud chcete hlubší detail, otevřete jednotlivé reporty agentů R1–R5.
-
-Čtení v tomto pořadí trvá ~15 minut a zachytí 90 % akčního obsahu.
-
+xmetrics is **not** built for day traders, options scalpers, or anyone looking for intraday signals. The cadence is weekly by design. Market structure shifts on this timescale; on shorter ones, noise dominates.
 
 ---
 
-[12] METODOLOGIE — SKÓROVÁNÍ A VÁHY
+[11] HOW TO READ A REPORT
 
-12A — Pilířové skórování (škála 1–10)
+Recommended reading order of a weekly session:
 
-Každý pilíř v každém reportu agenta je skórován na uniformní škále 1–10 s následující sémantikou:
+1. **Open `R6_YYYY-MM-DD.md`.** Read section `[1]` (CIO verdict) and `[2]` (feedback on the previous prediction).
+2. **Check the list of disqualifiers** in the Executive Summary. Any active disqualifier overrides agent-level scores — you need to know which rails are active before reading on.
+3. **Read section `[3A]` — Agent Dashboard.** A one-line summary per agent. This tells you where the consensus is and where the dissent.
+4. **If the consensus is 5/5, jump to the Contrarian Test.** This is the CIO's active attempt to falsify the consensus. If the test produces strong evidence, the verdict is upgraded to higher confidence.
+5. **Read section `[4] — Confrontational Debate`**. Each confrontation produces a dominant framework assignment (timing vs. magnitude).
+6. **Jump to section `[8] — AI Learning Metadata`.** The hypotheses tell you exactly what the system is predicting and how it will score itself next week.
+7. **Only then**, if you want deeper detail, open the individual R1–R5 agent reports.
+
+Reading in this order takes ~15 minutes and captures 90% of the actionable content.
+
+
+---
+
+[12] METHODOLOGY — SCORING AND WEIGHTS
+
+12A — Pillar scoring (scale 1–10)
+
+Each pillar in each agent's report is scored on a uniform 1–10 scale with the following semantics:
 
 ```
-1.0 – 2.5    Extrémně bearish / vážná dysfunkce / hlavní strukturální varování
-2.6 – 4.0    Bearish / nepříznivé / zvýšené riziko
-4.1 – 6.0    Neutrální / smíšené signály / žádná jasná hrana
-6.1 – 7.5    Bullish / příznivé / podpůrné podmínky
-7.6 – 10.0   Extrémně bullish / silný strukturální tailwind / nízké riziko
+1.0 – 2.5    Extremely bearish / serious dysfunction / major structural warning
+2.6 – 4.0    Bearish / unfavorable / elevated risk
+4.1 – 6.0    Neutral / mixed signals / no clear edge
+6.1 – 7.5    Bullish / favorable / supportive conditions
+7.6 – 10.0   Extremely bullish / strong structural tailwind / low risk
 ```
 
-Celkové skóre agenta je vážený součet pilířových skóre s použitím vah daného agenta.
+The agent's overall score is the weighted sum of pillar scores using that agent's weights.
 
-12B — CIO vážená agregace
-
-```
-SYSTEM_SCORE = Σ ( agent_skóre_i × váha_agenta_i ) + modifikátory
-kde:
-  váha_agenta_i    = základní_váha_i × regime_modifier_i × accuracy_modifier_i
-  Σ váha_agenta_i  = 100 % (normalizováno po modifikátorech)
-  modifikátory     = SKEW_VIX_mod + sentiment_mod + overlap_correction
-
-Základní váhy (před modifikátory):
-  R1 Marks          20 %
-  R2 Druckenmiller  25 %
-  R3 Damodaran      20 %
-  R4 Taleb          20 %
-  R5 TA             15 %
-```
-
-12C — Pravděpodobnostní distribuce
-
-Každý R6 report poskytuje tři pravděpodobnostně vážené scénáře:
+12B — CIO weighted aggregation
 
 ```
-P_BULL   — pravděpodobnostní váha bullish případu, se 4týdenním cílovým pásmem
-P_BASE   — pravděpodobnostní váha base case, se 4týdenním pásmem
-P_BEAR   — pravděpodobnostní váha bearish případu, se 4týdenním pásmem
-
-Σ P = 100 %
+SYSTEM_SCORE = Σ ( agent_score_i × agent_weight_i ) + modifiers
+where:
+  agent_weight_i  = base_weight_i × regime_modifier_i × accuracy_modifier_i
+  Σ agent_weight_i  = 100% (normalized after modifiers)
+  modifiers       = SKEW_VIX_mod + sentiment_mod + overlap_correction
 ```
 
-Tyto jsou kalibrované, ne marketingové. Report s P_BEAR = 40 % neznamená „jsem 40 % přesvědčený o bear scénáři" — znamená „v 40 srovnatelných historických nastaveních se tento výsledek stal zhruba osmnáctkrát."
+Base weights (before modifiers):
+```
+  R1 Marks          20%
+  R2 Druckenmiller  25%
+  R3 Damodaran      20%
+  R4 Taleb          20%
+  R5 TA             15%
+```
+
+12C — Probabilistic distribution
+
+Each R6 report provides three probability-weighted scenarios:
+
+```
+P_BULL   — probability weight of the bullish case, with a 4-week target range
+P_BASE   — probability weight of the base case, with a 4-week range
+P_BEAR   — probability weight of the bearish case, with a 4-week range
+
+Σ P = 100%
+```
+
+These are calibrated, not marketing. A report with P_BEAR = 40% does not mean "I am 40% convinced of the bear scenario" — it means "in 40 comparable historical setups, this outcome occurred roughly eighteen times."
 
 ---
 
-[13] GLOSÁŘ
+[13] GLOSSARY
 
-Klíčová terminologie napříč xmetrics reporty. Rozsah se rozšiřuje, jak vstupují nové koncepty.
+Key terminology across the xmetrics reports. The scope expands as new concepts enter.
 
-| **ERP**                      | Equity Risk Premium — prémie, kterou investoři požadují nad bezrizikovou sazbou za držení akcií |
-| **Naive ERP**                | Proxy výpočet: earnings yield (1 / P/E) minus 10letý Treasury yield                            |
-| **CAPE**                     | Cyclically-Adjusted P/E (Shiller P/E) — cena ÷ 10letý průměr inflačně očištěných zisků         |
-| **GEX**                      | Gamma Exposure — metrika struktury opčního trhu zachycující hedging Market Makerů              |
-| **GEX Flip**                 | Cenová úroveň, kde se net GEX otáčí na záporný; pod tímto bodem hedging MMs amplifikuje pohyby |
-| **GEX Regime POSITIVE**      | MMs jsou long gamma → prodávají rally, kupují poklesy → tlumí volatilitu                       |
-| **GEX Regime NEGATIVE**      | MMs jsou short gamma → prodávají poklesy, kupují rally → amplifikují volatilitu                |
-| **Call Wall / Put Wall**     | Strikes s nejvyšší koncentrací gamma exposure — působí jako support/resistance                 |
-| **VIX**                      | CBOE 30denní implied volatility z opcí na SPX                                                  |
-| **VIX termová struktura**    | Spread mezi delším (VIX3M) a spotem VIX. Pozitivní = contango (normální), záporný = backwardation (stres) |
-| **SKEW**                     | CBOE SKEW Index měřící cenu pojistky proti tail risk v opcích na SPX                          |
-| **SKEW/VIX Ratio**           | Poměr SKEW k VIX. > 7,0 indikuje klid na povrchu s institucionálním tail hedgingem pod ním    |
-| **RRP**                      | Reverse Repo Program — Fed facility, která drainuje systémovou likviditu, jak balance klesá   |
-| **M2**                       | Široké měřítko peněžní zásoby USA                                                              |
-| **FFR / Real FFR**           | Federal Funds Rate / FFR upravený o inflační očekávání                                         |
-| **Bear Steepener**           | Steepening yield curve poháněné rostoucími dlouhodobými yieldy (nepříznivé pro akcie)         |
-| **Bull Steepener**           | Steepening yield curve poháněné klesajícími krátkodobými yieldy (typicky Fed easing)          |
-| **PCR**                      | Put/Call Ratio                                                                                 |
-| **HY / IG**                  | High-Yield / Investment-Grade credit spreads nad Treasuries                                    |
-| **SLOOS**                    | Senior Loan Officer Opinion Survey — kvartální Fed průzkum o lending standardech              |
-| **CC Delinquency**           | Credit card delinquency rate — indikátor stresu spotřebitelského kreditu                      |
-| **Buffett Indicator**        | Total US tržní kapitalizace ÷ HDP. Historicky preferovaná valuační metrika                    |
-| **SPXA50R / SPXA200R**       | % konstituent SPX nad 50denním / 200denním moving average                                     |
-| **Breadth Collapse**         | Formální disqualifier — SPXA200R pod 30 % AND klesá                                           |
-| **Breadth Critical Divergence** | SPXA50R pod 15 % zatímco SPX je na nebo blízko ATH — early warning signal                  |
-| **Dual Complacency**         | Současný výskyt záporného ERP + zvýšený SKEW/VIX — triggeruje boost váhy R4                  |
-| **VPVR / POC**               | Volume Profile Visible Range / Point of Control — cenová úroveň s nejvíc obchodovaným objemem |
-| **VWAP (Anchored)**          | Volume-Weighted Average Price ukotvený na konkrétní referenční událost                         |
-| **Fibonacci Retracement**    | Klasické TA úrovně na 38,2 % / 50,0 % / 61,8 % předchozí swingu                              |
-| **RSI-14**                   | Relative Strength Index nad 14 period — momentum oscilátor (0–100)                            |
-| **ADX-14**                   | Average Directional Index — měřítko síly trendu (směrově neutrální)                           |
-| **Stoch RSI**                | Stochastic RSI — RSI normalizovaný na vlastní nedávný rozsah                                   |
-| **MACD Histogram**           | Moving Average Convergence Divergence rozdíl — momentum indikátor                             |
-| **OBV**                      | On-Balance Volume — kumulativní volume flow                                                    |
-| **MFI-14 / CMF-20**          | Money Flow Index / Chaikin Money Flow — volume-weighted momentum                              |
-| **Elliott Wave**             | Wave-count framework identifikující impulse (IMP) a corrective (COR) struktury                |
-| **Fragility Score**          | Talebova škála 1–10 kde 1 = maximálně fragilní, 10 = robustní/antifragilní                   |
-| **Barbell Positioning**      | Talebova strategie — koncentrace expozice na extrémech, vyhněte se středu                     |
-| **Disqualifier**             | Tvrdé pravidlo přepisující agregované skóre při triggeru                                      |
-| **Nonlinearity Multiplier**  | CIO odhad, jak moc by typický signál byl amplifikován aktuální tržní strukturou               |
-| **Falsifikovatelná hypotéza** | Explicitní predikce s datem ověření a binárním výsledkem — „H1: X do Y"                      |
-| **Contrarian Test**          | Povinný CIO krok při konsenzu 5/5 — aktivně se pokouší falsifikovat konsenzus                 |
-| **Overlap Correction**       | CIO úprava aplikovaná když dva agenti sdílejí >80 % datové báze                              |
-| **Regime Modifier**          | Dynamická úprava váhy podle aktuálního tržního režimu (např. ERP záporné → R4 boost)         |
-| **Accuracy Modifier**        | Dynamická úprava váhy podle nedávného track recordu hypotéz daného agenta                    |
-| **Disqualifier Haircut**     | R6 systémové pravidlo — disqualifiers aplikované v R5 score floor jsou na úrovni R6 aplikovány s 0,5× haircutem |
-| **RRP Data Discontinuity**   | Pokud RRP w/w změna > 200 %, signál je PAUSED a substituován M2_YOY decel + 2Y w/w move        |
-| **Gamma-regime Suspension**  | R5 nereportuje 1W směrovou predikci pod GEX_REGIME POSITIVE s NET > +1,0G; strukturální čtení pokračuje |
-
----
-
-[14] INTEGRITA SYSTÉMU — CO SYSTÉM NEDĚLÁ
-
-V zájmu intelektuální poctivosti je stejně důležité dokumentovat hranice jako schopnosti:
-
-- **Neposkytuje intraday signály.** Kadence je týdenní. Cokoliv rychlejšího je šum vůči makro frameworku.
-- **Neexekuuje obchody.** Produkuje analýzu, ne příkazy. Position sizing je vodítko — exekuce je odpovědnost čtenáře.
-- **Nepredikuje ceny jednotlivých akcií.** Scope je index (SPX) a hlavní sektorová rotace. Single-name analýza je mimo rámec.
-- **Nezaručuje hit rate.** Falsifikovatelné hypotézy budou selhávat. Učící smyčka existuje právě proto, že predikce je obtížná — systém získává svou hranu tím, že se opravuje rychleji než alternativy, ne tím, že se trefuje častěji v absolutních číslech.
-- **Nenahrazuje portfolio managera.** Lidský úsudek o position sizing, kontextu portfolia a toleranci rizika zůstává zásadní. xmetrics je decision-support nástroj neobvyklé hloubky — ne decision-making nástroj.
-- **Není investiční poradenství.** xmetrics není broker, není regulovaná finanční instituce. Veškerý obsah slouží k edukaci, ne jako doporučení k nákupu/prodeji. Pro investiční rozhodování konzultujte licencovaného poradce.
+| **ERP**                      | Equity Risk Premium — the premium investors demand over the risk-free rate for holding equities    |
+| **Naive ERP**                | Proxy calculation: earnings yield (1 / P/E) minus the 10-year Treasury yield                       |
+| **CAPE**                     | Cyclically-Adjusted P/E (Shiller P/E) — price ÷ 10-year average of inflation-adjusted earnings     |
+| **GEX**                      | Gamma Exposure — a metric of options market structure capturing Market Maker hedging               |
+| **GEX Flip**                 | The price level where net GEX flips negative; below this point MM hedging amplifies moves          |
+| **GEX Regime POSITIVE**      | MMs are long gamma → sell rallies, buy dips → dampen volatility                                    |
+| **GEX Regime NEGATIVE**      | MMs are short gamma → sell dips, buy rallies → amplify volatility                                  |
+| **Call Wall / Put Wall**     | Strikes with the highest concentration of gamma exposure — act as support/resistance               |
+| **VIX**                      | CBOE 30-day implied volatility from SPX options                                                    |
+| **VIX term structure**       | Spread between longer (VIX3M) and spot VIX. Positive = contango (normal), negative = backwardation (stress) |
+| **SKEW**                     | CBOE SKEW Index measuring the cost of insurance against tail risk in SPX options                  |
+| **SKEW/VIX Ratio**           | Ratio of SKEW to VIX. > 7.0 indicates calm on the surface with institutional tail hedging beneath  |
+| **RRP**                      | Reverse Repo Program — Fed facility that drains systemic liquidity as the balance falls            |
+| **M2**                       | Broad measure of US money supply                                                                   |
+| **FFR / Real FFR**           | Federal Funds Rate / FFR adjusted for inflation expectations                                       |
+| **Bear Steepener**           | Steepening of the yield curve driven by rising long-dated yields (unfavorable for equities)        |
+| **Bull Steepener**           | Steepening of the yield curve driven by falling short-dated yields (typically Fed easing)          |
+| **PCR**                      | Put/Call Ratio                                                                                     |
+| **HY / IG**                  | High-Yield / Investment-Grade credit spreads over Treasuries                                       |
+| **SLOOS**                    | Senior Loan Officer Opinion Survey — quarterly Fed survey on lending standards                     |
+| **CC Delinquency**           | Credit card delinquency rate — an indicator of consumer credit stress                              |
+| **Buffett Indicator**        | Total US market capitalization ÷ GDP. Historically a preferred valuation metric                    |
+| **SPXA50R / SPXA200R**       | % of SPX constituents above their 50-day / 200-day moving average                                  |
+| **Breadth Collapse**         | Formal disqualifier — SPXA200R below 30% AND falling                                               |
+| **Breadth Critical Divergence** | SPXA50R below 15% while SPX is at or near ATH — early warning signal                            |
+| **Dual Complacency**         | Simultaneous occurrence of negative ERP + elevated SKEW/VIX — triggers a boost to R4's weight      |
+| **VPVR / POC**               | Volume Profile Visible Range / Point of Control — the price level with the most traded volume     |
+| **VWAP (Anchored)**          | Volume-Weighted Average Price anchored to a specific reference event                               |
+| **Fibonacci Retracement**    | Classic TA levels at 38.2% / 50.0% / 61.8% of the previous swing                                   |
+| **RSI-14**                   | Relative Strength Index over 14 periods — a momentum oscillator (0–100)                            |
+| **ADX-14**                   | Average Directional Index — a measure of trend strength (directionally neutral)                    |
+| **Stoch RSI**                | Stochastic RSI — RSI normalized to its own recent range                                            |
+| **MACD Histogram**           | Moving Average Convergence Divergence difference — a momentum indicator                            |
+| **OBV**                      | On-Balance Volume — cumulative volume flow                                                         |
+| **MFI-14 / CMF-20**          | Money Flow Index / Chaikin Money Flow — volume-weighted momentum                                   |
+| **Elliott Wave**             | A wave-count framework identifying impulse (IMP) and corrective (COR) structures                   |
+| **Fragility Score**          | Taleb's 1–10 scale where 1 = maximally fragile, 10 = robust/antifragile                            |
+| **Barbell Positioning**      | Taleb's strategy — concentrate exposure at the extremes, avoid the middle                          |
+| **Disqualifier**             | A hard rule overriding the aggregated score when triggered                                         |
+| **Nonlinearity Multiplier**  | CIO estimate of how much a typical signal would be amplified by current market structure           |
+| **Falsifiable hypothesis**   | An explicit prediction with a verification date and a binary outcome — "H1: X by Y"                |
+| **Contrarian Test**          | A mandatory CIO step in case of 5/5 consensus — actively attempts to falsify the consensus          |
+| **Overlap Correction**       | A CIO adjustment applied when two agents share >80% of their data base                             |
+| **Regime Modifier**          | A dynamic weight adjustment based on the current market regime (e.g., ERP negative → R4 boost)     |
+| **Accuracy Modifier**        | A dynamic weight adjustment based on the recent hypothesis track record of the given agent         |
+| **Disqualifier Haircut**     | R6 system rule — disqualifiers applied in the R5 score floor are applied at R6 with a 0.5× haircut |
+| **RRP Data Discontinuity**   | If the RRP w/w change > 200%, the signal is PAUSED and substituted by M2_YOY decel + 2Y w/w move   |
+| **Gamma-regime Suspension**  | R5 does not report a 1W directional prediction under GEX_REGIME POSITIVE with NET > +1.0G; structural reading continues |
 
 ---
 
-[15] ZMĚNY FRAMEWORKU
+[14] SYSTEM INTEGRITY — WHAT THE SYSTEM DOES NOT DO
 
-Strukturální změny ve frameworku — nové metriky, modifikované prahy disqualifierů, noví agenti, upravené základní váhy — jsou dokumentovány. Změny se promítnou do následujících reportů automaticky a jejich zdůvodnění je dohledatelné v sekci `[10B] Patterns` v R6 reportu, kde každý pattern má svůj `STATUS` (ACTIVE / MONITORING / PAUSED / RETIRED).
+In the interest of intellectual honesty, it is just as important to document the boundaries as it is to document the capabilities:
+
+- **It does not provide intraday signals.** The cadence is weekly. Anything faster is noise relative to the macro framework.
+- **It does not execute trades.** It produces analysis, not orders. Position sizing is guidance — execution is the reader's responsibility.
+- **It does not predict individual stock prices.** The scope is the index (SPX) and major sector rotation. Single-name analysis is out of scope.
+- **It does not guarantee a hit rate.** Falsifiable hypotheses will fail. The learning loop exists precisely because prediction is difficult — the system gains its edge by correcting itself faster than the alternatives, not by hitting more often in absolute numbers.
+- **It does not replace a portfolio manager.** Human judgment on position sizing, portfolio context, and risk tolerance remains essential. xmetrics is a decision-support tool of unusual depth — not a decision-making tool.
+- **It is not investment advice.** xmetrics is not a broker and not a regulated financial institution. All content is for education, not as a recommendation to buy/sell. For investment decisions, consult a licensed advisor.
 
 ---
 
-*Konec dokumentace xmetrics. Pro metodologické otázky nad rámec tohoto dokumentu se podívejte na jednotlivé reporty agentů, které obsahují detailní příklady každého frameworku v akci. Glossář v [13] vysvětluje anglickou terminologii používanou v reportech R1–R6.*
+[15] FRAMEWORK CHANGES
+
+Structural changes to the framework — new metrics, modified disqualifier thresholds, new agents, adjusted base weights — are documented. Changes propagate into subsequent reports automatically and their rationale is traceable in section `[10B] Patterns` of the R6 report, where every pattern has its own `STATUS` (ACTIVE / MONITORING / PAUSED / RETIRED).
+
+---
+
+*End of xmetrics documentation. For methodological questions beyond this document, refer to the individual agent reports, which contain detailed examples of each framework in action. The glossary in [13] explains the English terminology used in reports R1–R6.*
