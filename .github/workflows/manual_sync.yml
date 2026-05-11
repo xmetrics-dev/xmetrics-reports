@@ -1,12 +1,14 @@
-name: Manual Report Sync
+name: Scheduled and Manual Report Sync
 
 on:
   workflow_dispatch:
     inputs:
       report_date:
         description: 'Enter report date (YYYY-MM-DD)'
-        required: true
-        default: '2026-05-01'
+        required: false
+  schedule:
+    # Runs every Sunday at 17:00 UTC (0 17 * * 0)
+    - cron: '0 17 * * 0'
 
 jobs:
   sync_job:
@@ -26,12 +28,18 @@ jobs:
         run: pip install requests
 
       - name: Execute Fetch Script
-        run: python fetch_reports.py "${{ github.event.inputs.report_date }}"
+        # If report_date is provided (manual), use it. Otherwise, script defaults to today.
+        run: |
+          if [ -n "${{ github.event.inputs.report_date }}" ]; then
+            python fetch_reports.py "${{ github.event.inputs.report_date }}"
+          else
+            python fetch_reports.py
+          fi
 
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Sync reports for ${{ github.event.inputs.report_date }}" || echo "No changes to commit"
+          git commit -m "Automated/Manual report sync" || echo "No changes to commit"
           git push
