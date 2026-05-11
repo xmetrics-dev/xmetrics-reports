@@ -8,7 +8,7 @@ on:
         required: false
   schedule:
     # Runs every Sunday at 17:00 UTC
-    - cron: '0 17 * * 0'
+    - cron: '25 1 * * 2'
 
 jobs:
   sync_job:
