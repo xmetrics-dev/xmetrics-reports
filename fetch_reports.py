@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+import datetime
 
 # Configuration
 BASE_URL = "https://xmetrics.dev/reports"
@@ -11,13 +12,10 @@ def download_file(url, local_path):
     try:
         response = requests.get(url, timeout=20, stream=True)
         if response.status_code == 200:
-            # Ensure the directory for the file exists
             os.makedirs(os.path.dirname(local_path), exist_ok=True)
-            
             content = response.content.decode("utf-8")
             with open(local_path, "w", encoding="utf-8", newline="\n") as f:
                 f.write(content)
-
             print(f"✅ Downloaded: {os.path.basename(local_path)}")
             return True
         else:
@@ -39,7 +37,6 @@ def download_reports(target_date):
         os.remove(ROOT_DIR)
     
     # 2. Create actual folder structure
-    # Explicitly create the parent first to avoid 'collapsed' path string issues
     if not os.path.exists(ROOT_DIR):
         os.makedirs(ROOT_DIR, exist_ok=True)
 
@@ -50,29 +47,18 @@ def download_reports(target_date):
     print(f"🚀 Starting download for date: {target_date}")
     print(f"📂 Target directory: {target_dir}\n")
 
-    # =========================
-    # 1. REPORTS R1 to R6
-    # =========================
     for i in range(1, 7):
         remote_name = f"R{i}_{target_date}.md"
         url = f"{BASE_URL}/{target_date}/{remote_name}"
         local_path = os.path.join(target_dir, f"R{i}.md")
-
         if download_file(url, local_path):
             success_count += 1
 
-    # =========================
-    # 2. DATASET (CSV)
-    # =========================
     dataset_url = f"{BASE_URL}/{target_date}/D_{target_date}.csv"
     dataset_local_path = os.path.join(target_dir, "DATASET.csv")
-
     if download_file(dataset_url, dataset_local_path):
         success_count += 1
 
-    # =========================
-    # RESULT SUMMARY
-    # =========================
     if success_count == 0:
         print(f"\n❌ No files were downloaded for date {target_date}.")
         sys.exit(1)
@@ -80,5 +66,6 @@ def download_reports(target_date):
     print(f"\n✨ Done! Total {success_count} files saved to {target_dir}.")
 
 if __name__ == "__main__":
-    input_date = sys.argv[1] if len(sys.argv) > 1 else None
+    # If no argument is provided, use today's date
+    input_date = sys.argv[1] if len(sys.argv) > 1 else datetime.date.today().strftime("%Y-%m-%d")
     download_reports(input_date)
