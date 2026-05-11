@@ -39,7 +39,10 @@ def download_reports(target_date):
         os.remove(ROOT_DIR)
     
     # 2. Create actual folder structure
-    # This ensures REPORTS is a folder and target_date is a subfolder
+    # Explicitly create the parent first to avoid 'collapsed' path string issues
+    if not os.path.exists(ROOT_DIR):
+        os.makedirs(ROOT_DIR, exist_ok=True)
+
     target_dir = os.path.join(ROOT_DIR, target_date)
     os.makedirs(target_dir, exist_ok=True)
 
