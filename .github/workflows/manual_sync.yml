@@ -4,11 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       report_date:
-        description: 'Enter report date (YYYY-MM-DD). Leave empty for auto-Friday sync.'
+        description: 'Zadejte datum (RRRR-MM-DD) nebo nechte prázdné pro automatický pátek'
         required: false
   schedule:
-    # Runs every Sunday at 17:00 UTC
-    - cron: '35 0 * * 2'
+    # 00:55 UTC odpovídá 01:55 SEČ (zimní čas)
+    # Spouští se každé úterý (2)
+    - cron: '55 0 * * 2'
 
 jobs:
   sync_job:
@@ -40,5 +41,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Sync reports (Auto-target Friday from Sunday run)" || echo "No changes"
+          git commit -m "Auto-sync report for last Friday" || echo "No changes to commit"
           git push
