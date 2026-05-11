@@ -37,10 +37,6 @@ xmetrics addresses:
 
 [3] SYSTEM ARCHITECTURE
 
----
-
-[3] ARCHITEKTURA SYSTÉMU
-
 -  D - Weekly Dataset --> 
 
 -  R1: H. Marks - Value & Cycle
