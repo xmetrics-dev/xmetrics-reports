@@ -39,7 +39,7 @@ def download_reports(target_date):
         print("❌ Chyba: Nebylo zadáno žádné datum!")
         sys.exit(1)
 
-    target_dir = os.path.join("Reports", target_date)
+    target_dir = os.path.join("REPORTS", target_date)
     os.makedirs(target_dir, exist_ok=True)
 
     success_count = 0
