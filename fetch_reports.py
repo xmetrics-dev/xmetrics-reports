@@ -31,12 +31,9 @@ def download_reports(target_date):
         print("❌ Error: No date provided!")
         sys.exit(1)
 
-    # 1. Clean up potential file/folder naming conflicts
     if os.path.exists(ROOT_DIR) and not os.path.isdir(ROOT_DIR):
-        print(f"⚠️ Warning: Removing file '{ROOT_DIR}' to create directory.")
         os.remove(ROOT_DIR)
     
-    # 2. Create actual folder structure
     if not os.path.exists(ROOT_DIR):
         os.makedirs(ROOT_DIR, exist_ok=True)
 
@@ -44,7 +41,7 @@ def download_reports(target_date):
     os.makedirs(target_dir, exist_ok=True)
 
     success_count = 0
-    print(f"🚀 Starting download for date: {target_date}")
+    print(f"🚀 Starting download for targeted date: {target_date}")
     print(f"📂 Target directory: {target_dir}\n")
 
     for i in range(1, 7):
@@ -60,12 +57,20 @@ def download_reports(target_date):
         success_count += 1
 
     if success_count == 0:
-        print(f"\n❌ No files were downloaded for date {target_date}.")
+        print(f"\n❌ No files were found for date {target_date}.")
         sys.exit(1)
 
     print(f"\n✨ Done! Total {success_count} files saved to {target_dir}.")
 
 if __name__ == "__main__":
-    # If no argument is provided, use today's date
-    input_date = sys.argv[1] if len(sys.argv) > 1 else datetime.date.today().strftime("%Y-%m-%d")
+    if len(sys.argv) > 1:
+        # If date is provided manually via argument
+        input_date = sys.argv[1]
+    else:
+        # Automatic mode: Take today's date and subtract 2 days (Sunday -> Friday)
+        today = datetime.date.today()
+        target = today - datetime.timedelta(days=2)
+        input_date = target.strftime("%Y-%m-%d")
+        print(f"📅 Automation: Today is {today}, targeting Friday's data ({input_date})")
+
     download_reports(input_date)
