@@ -9,7 +9,7 @@ on:
   schedule:
     # 00:55 UTC odpovídá 01:55 SEČ (zimní čas)
     # Spouští se každé úterý (2)
-    - cron: '55 0 * * 2'
+    - cron: '59 0 * * 2'
 
 jobs:
   sync_job:
