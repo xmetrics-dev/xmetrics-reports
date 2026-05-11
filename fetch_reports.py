@@ -69,7 +69,7 @@ if __name__ == "__main__":
     else:
         # Automatic mode: Take today's date and subtract 2 days (Sunday -> Friday)
         today = datetime.date.today()
-        target = today - datetime.timedelta(days=2)
+        target = today - datetime.timedelta(days=4)
         input_date = target.strftime("%Y-%m-%d")
         print(f"📅 Automation: Today is {today}, targeting Friday's data ({input_date})")
 
