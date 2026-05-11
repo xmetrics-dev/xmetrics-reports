@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       report_date:
-        description: 'Zadej datum reportů (RRRR-MM-DD)'
+        description: 'Enter report date (YYYY-MM-DD)'
         required: true
         default: '2026-05-01'
 
@@ -32,6 +32,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add REPORTS/ || true
+          git add .
           git commit -m "Sync reports for ${{ github.event.inputs.report_date }}" || echo "No changes to commit"
           git push
