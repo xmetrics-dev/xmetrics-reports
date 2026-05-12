@@ -7,9 +7,7 @@ on:
         description: 'Zadejte datum (RRRR-MM-DD) nebo nechte prázdné pro automatický pátek'
         required: false
   schedule:
-    # 00:55 UTC odpovídá 01:55 SEČ (zimní čas)
-    # Spouští se každé úterý (2)
-    - cron: '59 0 * * 2'
+    - cron: '12 1 * * 2'
 
 jobs:
   sync_job:
