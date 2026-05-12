@@ -1,6 +1,6 @@
 name: Scheduled and Manual Report Sync
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       report_date:
