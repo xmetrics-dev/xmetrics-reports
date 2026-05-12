@@ -7,7 +7,7 @@ on:
         description: 'Zadejte datum (RRRR-MM-DD) nebo nechte prázdné pro automatický pátek'
         required: false
   schedule:
-     - cron: '*/2 * * * *'
+     - cron: '10 1 * * 2'
 
 jobs:
   sync_job:
