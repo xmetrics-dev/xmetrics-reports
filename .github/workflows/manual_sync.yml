@@ -7,7 +7,8 @@ name: Scheduled and Manual Report Sync
         description: 'Zadejte datum (RRRR-MM-DD) nebo nechte prázdné pro automatický pátek'
         required: false
   schedule:
-    - cron: '30 1 * * 2'
+    - cron: '30 1 * * 2'     # produkční: úterý 01:30 UTC
+    - cron: '30 11 * * 2'    # TEST: úterý 11:30 UTC (dnes 13:30 SELČ) — odstranit po ověření
 
 jobs:
   sync_job:
