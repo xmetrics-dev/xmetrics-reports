@@ -3,7 +3,7 @@
 
 [1] ABOUT THE PROJECT
 
-xmetrics is a weekly analytical AI framework that simulates the decision-making process of a top hedge fund. Every Friday after the US market closes, a snapshot of **100 metrics** on the US market, macroeconomics, credit, sentiment, and options is captured. This dataset is processed by **five virtual analytical agents**, whose reasoning is calibrated to the methodologies of Howard Marks, Stanley Druckenmiller, Aswath Damodaran, Nassim Taleb, and a professional technical analyst. All five reports are then delivered to the **CIO director**, who reviews the agents' outputs, conducts a debate among the agents, and synthesizes the final investment stance.
+xmetrics is a weekly analytical AI framework that simulates the decision-making process of a top hedge fund. Every Friday after the US market closes, a snapshot of **103 metrics** on the US market, macroeconomics, credit, sentiment, and options is captured. This dataset is processed by **five virtual analytical agents**, whose reasoning is calibrated to the methodologies of Howard Marks, Stanley Druckenmiller, Aswath Damodaran, Nassim Taleb, and a professional technical analyst. All five reports are then delivered to the **CIO director**, who reviews the agents' outputs, conducts a debate among the agents, and synthesizes the final investment stance.
 
 The engine powering the system is **Anthropic Claude Opus**. The key thing — the system **remembers**. A three-tier memory (short-term, medium-term, long-term) allows the CIO to track predictions, penalize agents whose calls failed, reward those who got it right, dynamically adjust weights, and progressively refine the decision matrix.
 
@@ -12,7 +12,7 @@ The goal of the project is a deeper understanding of the SPX market — what is 
 ```
 SCORE SCALE:               1.0 (extreme bear) → 10.0 (extreme bull)
 AGENTS:                    5 independent agents + 1 agent (CIO)
-METRICS PER ANALYSIS:      ~100
+METRICS PER ANALYSIS:      ~103
 FREQUENCY:                 Weekly (Fridays, post-close)
 LEARNING LOOP:             3-tier (weekly / quarterly / cumulative)
 FALSIFIABILITY:            Each report contains testable hypotheses
@@ -49,7 +49,7 @@ xmetrics addresses:
 
 ---
 
-[4] DATA LAYER — 100 METRICS, ONE SOURCE OF TRUTH
+[4] DATA LAYER — 103 METRICS, ONE SOURCE OF TRUTH
 
 Every Friday the system generates a single canonical dataset — `D_YYYY-MM-DD.csv` — used by all agents. This is intentional: agents must reason from a strictly fixed set of metrics. Any disagreement between them is therefore purely methodological, never informational.
 
@@ -241,7 +241,7 @@ A complete weekly session produces seven artifacts:
 
 ```
 reports/YYYY-MM-DD/
-├── D_YYYY-MM-DD.csv       ~100 metrics, three time dimensions, explicit units
+├── D_YYYY-MM-DD.csv       ~103 metrics, three time dimensions, explicit units
 ├── R1_YYYY-MM-DD.md       Howard Marks report (~14–18 KB)
 ├── R2_YYYY-MM-DD.md       Druckenmiller report (~11–15 KB)
 ├── R3_YYYY-MM-DD.md       Damodaran report (~12–14 KB)
